@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Last Published: Wed Sep 16 2015 09:14:36 GMT+0000 (UTC) -->
+<!-- Last Published: Wed Sep 16 2015 16:15:35 GMT+0000 (UTC) -->
 <html data-wf-site="5531d61bdfdcc63850cff462" data-wf-page="555dd04256ef96f34eb5f86d">
 <head>
   <meta charset="utf-8">
@@ -126,48 +126,94 @@
 -->
 </head>
 <body>
-  <div class="disclaimer" data-ix="close-disclaimer">
+  <div class="disclaimer" id="disclaimer-popup" data-ix="close-disclaimer">
     <div class="disclaimer-box"><img class="doc" width="100" src="images/doc.svg">
       <p class="product-para disc">Hey there cool person! As we're not the type of company who uses trickery to make sales, we just want to let you know that by placing your order, you're agreeing to our Terms of Service (link below).&nbsp;Anyway, we'll let you get on with your order :-)</p>
-      <div class="w-embed pre-order-button">
-        <!-- Style -->
+      <div class="w-embed w-script pre-order-button" data-ix="hide-disc">
         <style>
-          .pre-btn {
-            /* fade out */
-            -ms-transition:.3s;
-            -moz-transition:.3s;
-            -webkit-transition:.3s;
-            transition:.3s;
-            width: 150px;
-            height: 30px;
+          .celery-button {
+            -webkit-transition: 300ms;
+            transition: 300ms;
+            max-width: 280px;
+            padding-top: 18px;
+            padding-bottom: 19px;
+            padding-left: 25px;
+            padding-right: 25px;
+            background-color: #f72c2d;
             color: white;
-            background-color: #F72C2D;
-            font-family: "omnes-pro, sans-serif";
-            font-size: 16px;
-            padding-top: 7px;
-            padding-bottom: 8px;
-            padding-left: 12px;
-            padding-right: 12px;
-            text-decoration: none;
+            font-family: omnes-pro,sans-serif;
+            font-weight: 500;
+            font-size: 27px;
             border-radius: 5px;
-          }
-          .pre-btn:hover {
-            /* fade in */
-            -ms-transition:.3s;
-            -moz-transition:.3s;
-            -webkit-transition:.3s;
-            transition:.3s;
-            background-color: #e22324;
+            display: block;
+            text-align: center;
+            margin: 0 auto;
+            margin-bottom: 20px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+          .celery-button:hover {
+            background-color: #e81010;
           }
         </style>
-        <!-- Celery pre-order popup -->
-        <a style="font-family: omnes-pro, sans-serif;" class="pre-btn" data-celery="55c732da23605d0300165747" data-celery-version="v2" href="https://shop.trycelery.com/page/55c732da23605d0300165747">Pre-order for 20% off</a>
-      </div><a class="w-button button disc" href="#">Continue order</a>
+        <script async type="text/javascript" src="https://www.trycelery.com/js/celery.js"></script>
+        <a class="celery-button" href="https://shop.trycelery.com/page/55c732da23605d0300165747" data-celery="55c732da23605d0300165747" data-celery-version="v2">Continue order</a>
+      </div>
       <div class="w-form">
         <form id="email-form" name="email-form" data-name="Email Form">
           <div class="w-checkbox form-disc">
-            <input class="w-checkbox-input" id="I-agree-to-Terms-and-Conditions" type="checkbox" name="I-agree-to-Terms-and-Conditions" data-name="I agree to Terms and Conditions" checked="checked">
-            <label class="w-form-label" for="I-agree-to-Terms-and-Conditions">I agree to the <a href="http://blog.noots.co/2015/09/11/terms-of-service-disclaimer/" target="_blank">Terms of Service</a>
+            <input class="w-checkbox-input" id="I-agree-to-Terms-and-Conditions" type="checkbox" name="I-agree-to-Terms-and-Conditions" data-name="I agree to Terms and Conditions" checked="checked" data-ix="hide-disc">
+            <label class="w-form-label" for="I-agree-to-Terms-and-Conditions">I agree to the <a target="_blank" href="disclaimer.html">Terms of Service</a>
+            </label>
+          </div>
+        </form>
+        <div class="w-form-done">
+          <p>Thank you! Your submission has been received!</p>
+        </div>
+        <div class="w-form-fail">
+          <p>Oops! Something went wrong while submitting the form</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="disclaimer-onetime" id="disclaimer-popup-2" data-ix="close-disclaimer-2">
+    <div class="disclaimer-box"><img class="doc" width="100" src="images/doc.svg">
+      <p class="product-para disc">Hey there cool person! As we're not the type of company who uses trickery to make sales, we just want to let you know that by placing your order, you're agreeing to our Terms of Service (link below).&nbsp;Anyway, we'll let you get on with your order :-)</p>
+      <div class="w-embed w-script pre-order-button" data-ix="hide-disc-2">
+        <style>
+          .celery-button {
+            -webkit-transition: 300ms;
+            transition: 300ms;
+            max-width: 280px;
+            padding-top: 18px;
+            padding-bottom: 19px;
+            padding-left: 25px;
+            padding-right: 25px;
+            background-color: #f72c2d;
+            color: white;
+            font-family: omnes-pro,sans-serif;
+            font-weight: 500;
+            font-size: 27px;
+            border-radius: 5px;
+            display: block;
+            text-align: center;
+            margin: 0 auto;
+            margin-bottom: 20px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+          .celery-button:hover {
+            background-color: #e81010;
+          }
+        </style>
+        <script async type="text/javascript" src="https://www.trycelery.com/js/celery.js"></script>
+        <a class="celery-button" href="https://shop.trycelery.com/page/55c6ab281bba7b0300a1fc30" data-celery="55c6ab281bba7b0300a1fc30" data-celery-version="v2">Continue order</a>
+      </div>
+      <div class="w-form">
+        <form id="email-form" name="email-form" data-name="Email Form">
+          <div class="w-checkbox form-disc">
+            <input class="w-checkbox-input" id="I-agree-to-Terms-and-Conditions-2" type="checkbox" name="I-agree-to-Terms-and-Conditions-2" data-name="I Agree To Terms And Conditions 2" checked="checked" data-ix="hide-disc-3">
+            <label class="w-form-label" for="I-agree-to-Terms-and-Conditions-2">I agree to the <a target="_blank" href="disclaimer.html">Terms of Service</a>
             </label>
           </div>
         </form>
@@ -199,7 +245,7 @@
       <nav class="w-nav-menu w-clearfix" role="navigation">
         <div class="w-widget w-widget-facebook facebook-nav">
           <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fnoots.suppliments&amp;layout=button_count&amp;locale=en_US&amp;action=like&amp;show_faces=false&amp;share=false" scrolling="no" frameborder="0" allowtransparency="true" style="border: none; overflow: hidden; width: 90px; height: 20px;"></iframe>
-        </div><a class="w-nav-link w-hidden-small w-hidden-tiny nav-link buynow" href="#focus" data-ix="show-overlay">Buy now</a><a class="w-nav-link w-hidden-small w-hidden-tiny nav-link" href="mailto:yo@noots.co?subject=Hey%20noots%2C%20I%20have%20a%20question!" data-ix="show-overlay">Contact us</a><a class="w-nav-link w-hidden-main w-hidden-small w-hidden-tiny nav-link" href="#" data-ix="show-overlay">FAQs</a><a class="w-nav-link w-hidden-tiny nav-link" href="http://blog.noots.co" target="_blank" data-ix="show-overlay">Blog</a><a class="w-hidden-main w-hidden-medium w-hidden-small w-hidden-tiny button navigation" href="#">Get early access</a>
+        </div><a class="w-nav-link w-hidden-small w-hidden-tiny nav-link buynow" href="#focus" data-ix="show-overlay">Buy now</a><a class="w-nav-link w-hidden-small w-hidden-tiny nav-link" href="mailto:yo@noots.co?subject=Hey%20noots%2C%20I%20have%20a%20question!" data-ix="show-overlay">Contact us</a><a class="w-nav-link w-hidden-main w-hidden-small w-hidden-tiny nav-link" href="#" data-ix="show-overlay">FAQs</a><a class="w-nav-link w-hidden-tiny nav-link" href="disclaimer.html" target="_blank" data-ix="show-overlay">Legal</a><a class="w-nav-link w-hidden-tiny nav-link" href="http://blog.noots.co" target="_blank" data-ix="show-overlay">Blog</a><a class="w-hidden-main w-hidden-medium w-hidden-small w-hidden-tiny button navigation" href="#">Get early access</a>
       </nav>
       <div class="w-nav-button">
         <div class="w-icon-nav-menu"></div>
@@ -272,41 +318,7 @@
               <div class="w-tab-pane tab-price" data-w-tab="Tab 2">
                 <div class="price-head"></div>
                 <div class="w-clearfix price-button">
-                  <div class="price-text">FOCUS - 20x packs</div>
-                  <div class="w-embed pre-order-button">
-                    <!-- Style -->
-                    <style>
-                      .pre-btn {
-                        /* fade out */
-                        -ms-transition:.3s;
-                        -moz-transition:.3s;
-                        -webkit-transition:.3s;
-                        transition:.3s;
-                        width: 150px;
-                        height: 30px;
-                        color: white;
-                        background-color: #F72C2D;
-                        font-family: "omnes-pro, sans-serif";
-                        font-size: 16px;
-                        padding-top: 7px;
-                        padding-bottom: 8px;
-                        padding-left: 12px;
-                        padding-right: 12px;
-                        text-decoration: none;
-                        border-radius: 5px;
-                      }
-                      .pre-btn:hover {
-                        /* fade in */
-                        -ms-transition:.3s;
-                        -moz-transition:.3s;
-                        -webkit-transition:.3s;
-                        transition:.3s;
-                        background-color: #e22324;
-                      }
-                    </style>
-                    <!-- Celery pre-order popup -->
-                    <a style="font-family: omnes-pro, sans-serif;" class="pre-btn" data-celery="55c6ab281bba7b0300a1fc30" data-celery-version="v2" href="https://shop.trycelery.com/page/55c6ab281bba7b0300a1fc30">Pre-order for 20% off</a>
-                  </div>
+                  <div class="price-text">FOCUS - 20x packs</div><a class="w-button button small" href="#" data-ix="show-disclaimer-onetime">Pre-order for 20% off</a>
                   <div class="price-text _2">$59</div>
                 </div>
               </div>
@@ -466,7 +478,7 @@
     <h1 class="h1-regular">Join the #noots community</h1>
     <div class="w-hidden-tiny line-break"></div>
     <div class="w-form mailing-list">
-      <form class="news" id="wf-form-Mailing-list" name="wf-form-Mailing-list" data-name="Mailing list" action="http://noots.us11.list-manage.com/subscribe/post?u=c6fa45f9ffb047cfa1b0acdff&amp;amp;id=faa21d7244">
+      <form class="w-clearfix news" id="wf-form-Mailing-list" name="wf-form-Mailing-list" data-name="Mailing list" action="http://noots.us11.list-manage.com/subscribe/post?u=c6fa45f9ffb047cfa1b0acdff&amp;amp;id=faa21d7244">
         <input class="w-input text-field-form _3" id="newsletter-email" type="email" placeholder="Enter your email address" name="email" data-name="Email 5" required="required">
         <input class="w-button frm-btn" type="submit" value="Signup" data-wait="Please wait...">
       </form>
@@ -477,7 +489,9 @@
         <p class="success-p dark">Computer says no... Give it another try!</p>
       </div>
     </div>
-    <h1 class="h1-regular">prefer to join our #slack channel? (logo) request invite (email, form)</h1>
+    <div class="slack">
+      <p class="h2 sl">Within a day you will get an invite to our&nbsp;<span class="bold">#Slack</span> community. In addition, you will receive a once-monthly update via email. No spam, promise!</p>
+    </div>
     <p class="h2 disclaimertxt"><span class="bold">Disclaimer:&nbsp;</span>This nootropic stack is not considered a dietary supplement and as such should only be taken under the guidance of a doctor or in a research setting. Statements found within have not been evaluated by the Food and Drug Administration. These products are not intended to diagnose, treat, cure or prevent any disease. Always consult a physician if you are unsure about taking a new supplement or nootropic. Do not take this product if you are under 18, if you are pregnant, nursing, or have any cardiovascular issues.</p>
   </div>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
