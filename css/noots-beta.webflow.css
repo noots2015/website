@@ -1,7 +1,7 @@
 body {
   overflow-x: visible;
   overflow-y: visible;
-  height: auto;
+  height: 100%;
   padding-top: 10px;
   padding-right: 10px;
   padding-left: 10px;
@@ -24,7 +24,9 @@ h2 {
   display: block;
   width: 70%;
   max-width: 750px;
-  margin: 0px auto 75px;
+  margin-right: auto;
+  margin-bottom: 75px;
+  margin-left: auto;
   float: none;
   clear: both;
   opacity: 0.5;
@@ -67,7 +69,6 @@ h6 {
   font-weight: 700;
 }
 p {
-  margin-top: 0px;
   margin-bottom: 25px;
   float: left;
   font-family: omnes-pro, sans-serif;
@@ -159,26 +160,6 @@ p {
   background-color: #f72d2d;
   color: white;
 }
-.button.disc {
-  display: block;
-  width: auto;
-  max-width: 250px;
-  margin-right: auto;
-  margin-bottom: 25px;
-  margin-left: auto;
-  float: none;
-  clear: none;
-  border-radius: 5px;
-}
-.button.small {
-  width: 172px;
-  height: 38px;
-  margin-right: 10px;
-  padding: 6px 10px 0px;
-  float: left;
-  clear: none;
-  font-size: 16px;
-}
 .hero {
   position: static;
   display: block;
@@ -218,7 +199,6 @@ p {
   overflow-y: visible;
   width: 100%;
   padding-top: 85px;
-  padding-bottom: 75px;
   border-right: 0px none white;
   background-color: transparent;
   background-image: -webkit-linear-gradient(rgba(210, 26, 54, 0.95), rgba(210, 26, 54, 0.95));
@@ -294,7 +274,7 @@ p {
 }
 .block.dark {
   padding-right: 100px;
-  padding-bottom: 100px;
+  padding-bottom: 200px;
   padding-left: 100px;
   background-image: none;
   background-position: 0% 0%;
@@ -464,10 +444,6 @@ p {
   font-size: 45px;
   font-weight: 500;
 }
-.h1-regular.red {
-  margin-bottom: 100px;
-  color: #f72d2d;
-}
 .line-break {
   display: block;
   width: 100px;
@@ -496,7 +472,7 @@ p {
   display: block;
   max-width: 800px;
   margin-right: auto;
-  margin-bottom: 200px;
+  margin-bottom: 100px;
   margin-left: auto;
   float: none;
   clear: none;
@@ -512,21 +488,6 @@ p {
   float: left;
   color: #f72d2d;
   font-weight: 500;
-}
-.h2.disclaimertxt {
-  max-width: 655px;
-  margin-bottom: 0px;
-  opacity: 0.8;
-  font-size: 12px;
-  line-height: 22px;
-  text-align: left;
-  list-style-type: none;
-}
-.h2.sl {
-  max-width: 100%;
-  margin-bottom: 0px;
-  font-size: 15px;
-  line-height: 22px;
 }
 ._4x-row {
   display: block;
@@ -546,9 +507,6 @@ p {
 .h1-red.dark {
   color: #141414;
   text-decoration: none;
-}
-.h1-red.dark._222 {
-  margin-bottom: 100px;
 }
 .overview-text-block {
   display: block;
@@ -754,7 +712,7 @@ p {
 }
 .navbar {
   position: fixed;
-  z-index: 5;
+  z-index: 99999999;
   width: 100%;
   height: 60px;
   margin-top: -10px;
@@ -774,15 +732,6 @@ p {
   font-size: 18px;
   font-weight: 400;
 }
-.nav-link.w--current {
-  color: #f72d2d;
-}
-.nav-link.w--current:active {
-  color: #f72d2d;
-}
-.nav-link.w--current:focus {
-  color: #f72d2d;
-}
 .nav-link.buynow {
   width: auto;
   border-radius: 0px;
@@ -794,7 +743,6 @@ p {
   background-color: #e81010;
 }
 .nav-container {
-  position: relative;
   width: 100%;
   height: 60px;
   max-width: 100%;
@@ -1246,13 +1194,6 @@ p {
   float: none;
   font-size: 23px;
 }
-.product-para.disc {
-  margin-bottom: 35px;
-  font-size: 20px;
-}
-.product-para._2 {
-  margin-bottom: 35px;
-}
 .bold {
   font-weight: 500;
 }
@@ -1344,9 +1285,8 @@ p {
 }
 .mailing-list {
   display: block;
-  max-width: 480px;
+  max-width: 490px;
   margin-right: auto;
-  margin-bottom: 25px;
   margin-left: auto;
 }
 .frm-btn {
@@ -1383,29 +1323,26 @@ p {
   background-color: #f8f8f8;
 }
 .price-text {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   float: left;
   font-family: omnes-pro, sans-serif;
   color: black;
   font-size: 20px;
 }
 .price-text._2 {
-  margin-top: 8px;
   color: #525252;
   font-size: 22px;
 }
 .pre-order-button {
   margin-right: 15px;
-  float: none;
+  float: left;
   text-decoration: none;
 }
 .news {
-  width: 480px;
   height: 55px;
 }
 .success-news {
-  height: auto;
-  padding-bottom: 20px;
+  height: 52px;
   border-radius: 5px;
   background-color: #383838;
   color: white;
@@ -1413,11 +1350,9 @@ p {
 .success-p {
   display: block;
   margin-right: auto;
-  margin-bottom: 0px;
   margin-left: auto;
   float: none;
   color: white;
-  font-size: 23px;
   text-align: center;
 }
 .success-p.dark {
@@ -1478,80 +1413,6 @@ p {
   font-size: 30px;
   font-weight: 700;
 }
-.disclaimer {
-  position: fixed;
-  left: 0px;
-  top: 0px;
-  z-index: 6;
-  width: 100%;
-  height: 100%;
-  padding-top: 75px;
-  background-color: rgba(0, 0, 0, 0.9);
-}
-.disclaimer-box {
-  display: block;
-  width: 460px;
-  margin-right: auto;
-  margin-left: auto;
-  padding: 35px 50px 50px;
-  border-radius: 5px;
-  background-color: white;
-}
-.doc {
-  display: block;
-  margin-right: auto;
-  margin-bottom: 35px;
-  margin-left: auto;
-}
-.form-disc {
-  display: block;
-  width: 215px;
-  margin-right: auto;
-  margin-left: auto;
-  float: none;
-  clear: none;
-}
-.slack {
-  display: block;
-  width: 480px;
-  margin-right: auto;
-  margin-bottom: 150px;
-  margin-left: auto;
-  padding: 15px;
-  border: 1px dashed #676767;
-  border-radius: 5px;
-  background-color: transparent;
-}
-.body {
-  display: block;
-  width: 100%;
-  margin-right: auto;
-  margin-left: auto;
-  padding-top: 125px;
-  padding-bottom: 100px;
-}
-.disclaimer-text {
-  display: block;
-  max-width: 650px;
-  margin-right: auto;
-  margin-left: auto;
-  padding: 50px;
-  border: 2px dashed #e2e2e2;
-  border-radius: 5px;
-}
-._2 {
-  margin-bottom: 15px;
-}
-.disclaimer-onetime {
-  position: fixed;
-  left: 0px;
-  top: 0px;
-  z-index: 6;
-  width: 100%;
-  height: 100%;
-  padding-top: 75px;
-  background-color: rgba(0, 0, 0, 0.7);
-}
 html.w-mod-js *[data-ix="display-none"] {
   display: none;
 }
@@ -1564,12 +1425,6 @@ html.w-mod-js *[data-ix="overlay-hidden"] {
 }
 html.w-mod-js *[data-ix="fade"] {
   opacity: 0;
-}
-html.w-mod-js *[data-ix="close-disclaimer"] {
-  display: none;
-}
-html.w-mod-js *[data-ix="close-disclaimer-2"] {
-  display: none;
 }
 @media (max-width: 991px) {
   h2 {
@@ -1933,11 +1788,6 @@ html.w-mod-js *[data-ix="close-disclaimer-2"] {
   .product-left-col {
     padding-right: 0px;
   }
-  .product-para.disc {
-    margin-bottom: 25px;
-    font-size: 16px;
-    line-height: 26px;
-  }
   .list {
     padding-left: 20px;
   }
@@ -1976,19 +1826,6 @@ html.w-mod-js *[data-ix="close-disclaimer-2"] {
     display: block;
     margin-right: auto;
     margin-left: auto;
-  }
-  .disclaimer {
-    padding-top: 10px;
-  }
-  .disclaimer-box {
-    width: 95%;
-    padding: 25px 33px;
-  }
-  .doc {
-    margin-bottom: 25px;
-  }
-  .disclaimer-text {
-    padding: 25px;
   }
 }
 

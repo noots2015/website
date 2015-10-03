@@ -1,0 +1,14 @@
+<div class="ssk-block">
+    <a style="width: 150px; float: left; margin-right: 10px; border-radius: 5px;" href="" class="ssk ssk-text ssk-facebook">Facebook</a>
+    <a style="width: 150px; float: left; margin-right: 10px; border-radius: 5px;" class="ssk ssk-text ssk-twitter">Twitter</a>
+    <a style="width: 150px; float: left; margin-right: 10px; border-radius: 5px;" href="" class="ssk ssk-text ssk-linkedin">LinkedIn</a>
+    <a style="width: 150px; float: left; margin-right: 10px; border-radius: 5px;" href="" class="ssk ssk-text ssk-email">Email</a>
+</div>
+
+<!-- Percentage based alternative -->
+
+<!--
+<a style="width: 22.5%; float: left; margin-right: 10px; border-radius: 5px;" href="" class="ssk ssk-text ssk-facebook">Facebook</a>
+<a style="width: 22.5%; float: left; margin-right: 10px; border-radius: 5px;" class="ssk ssk-text ssk-twitter">Twitter</a>
+<a style="width: 22.5%; float: left; margin-right: 10px; border-radius: 5px;" href="" class="ssk ssk-text ssk-linkedin">LinkedIn</a>
+<a style="width: 22.5%; float: left; margin-right: 10px; border-radius: 5px;" href="" class="ssk ssk-text ssk-email">Email</a> -->
