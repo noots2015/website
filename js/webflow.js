@@ -89,6 +89,7 @@
 	var _ = Webflow._ = __webpack_require__(18);
 	var tram = __webpack_require__(3) && $.tram;
 	var domready = false;
+	var destroyed = false;
 	var Modernizr = window.Modernizr;
 	var noop = function() {};
 	tram.config.hideBackface = false;
@@ -124,13 +125,21 @@
 	  }
 	  // Subscribe to front-end destroy event
 	  isFunction(module.destroy) && $win.on('__wf_destroy', module.destroy);
-	  // Look for a ready method on module
+	  // Look for ready method on module
 	  if (module.ready && isFunction(module.ready)) {
-	    // If domready has already happened, call ready method
-	    if (domready) module.ready();
-	    // Otherwise push ready method into primary queue
-	    else primary.push(module.ready);
+	    addReady(module);
 	  }
+	}
+
+	function addReady(module) {
+	  // If domready has already happened, run ready method
+	  if (domready) {
+	    module.ready();
+	    return;
+	  }
+	  // Otherwise add ready method to the primary queue (only once)
+	  if (_.contains(primary, module.ready)) return;
+	  primary.push(module.ready);
 	}
 
 	function unbindModule(module) {
@@ -138,13 +147,16 @@
 	  isFunction(module.design) && $win.off('__wf_design', module.design);
 	  isFunction(module.preview) && $win.off('__wf_preview', module.preview);
 	  isFunction(module.destroy) && $win.off('__wf_destroy', module.destroy);
-
-	  // Remove from primary queue if domready hasn't happened
-	  if (!domready) {
-	    primary = _.filter(primary, function(readyFn) {
-	      return readyFn !== module.ready;
-	    });
+	  // Remove ready method from primary queue
+	  if (module.ready && isFunction(module.ready)) {
+	    removeReady(module);
 	  }
+	}
+
+	function removeReady(module) {
+	  primary = _.filter(primary, function(readyFn) {
+	    return readyFn !== module.ready;
+	  });
 	}
 
 	/**
@@ -274,13 +286,30 @@
 	// Webflow.ready - Call primary and secondary handlers
 	Webflow.ready = function() {
 	  domready = true;
-	  _.each(primary.concat(secondary), callReady);
+
+	  // Restore modules after destroy
+	  if (destroyed) {
+	    restoreModules();
+
+	  // Otherwise run primary ready methods
+	  } else {
+	    _.each(primary, callReady);
+	  }
+
+	  // Run secondary ready methods
+	  _.each(secondary, callReady);
+
 	  // Trigger resize
 	  Webflow.resize.up();
 	};
 
 	function callReady(readyFn) {
 	  isFunction(readyFn) && readyFn();
+	}
+
+	function restoreModules() {
+	  destroyed = false;
+	  _.each(modules, bindModule);
 	}
 
 	/**
@@ -304,17 +333,27 @@
 	}
 
 	// Webflow.destroy - Trigger a destroy event for all modules
-	Webflow.destroy = function() {
+	Webflow.destroy = function(options) {
+	  options = options || {};
+	  destroyed = true;
 	  $win.triggerHandler('__wf_destroy');
 
-	  // Unbind and clear modules
+	  // Allow domready reset for tests
+	  if (options.domready != null) {
+	    domready = options.domready;
+	  }
+
+	  // Unbind modules
 	  _.each(modules, unbindModule);
-	  modules = {};
 
 	  // Clear any proxy event handlers
 	  Webflow.resize.off();
 	  Webflow.scroll.off();
 	  Webflow.redraw.off();
+
+	  // Clear any queued ready methods
+	  primary = [];
+	  secondary = [];
 
 	  // If load event has not yet fired, replace the deferred
 	  if (deferLoad.state() === 'pending') bindLoad();
@@ -719,7 +758,7 @@
 	    window.WebflowEditor = true;
 	    $win.off(hashchange, checkHash);
 	    $.ajax({
-	      url: cleanSlashes(("https://webflow.com") + '/api/editor/view'),
+	      url: cleanSlashes(("https://editor-api.webflow.com") + '/api/editor/view'),
 	      xhrFields: { withCredentials: true },
 	      dataType: 'json',
 	      crossDomain: true,
@@ -747,7 +786,7 @@
 	  }
 
 	  function prefix(url) {
-	    return (url.indexOf('//') >= 0) ? url : cleanSlashes(("https://webflow.com") + url);
+	    return (url.indexOf('//') >= 0) ? url : cleanSlashes(("https://editor-api.webflow.com") + url);
 	  }
 
 	  function cleanSlashes(url) {
@@ -1120,6 +1159,7 @@
 	  var loads = [];
 	  var readys = [];
 	  var destroyed;
+	  var readyDelay = 1;
 
 	  // Component types and proxy selectors
 	  var components = {
@@ -1138,6 +1178,7 @@
 
 	  api.preview = function() {
 	    designer = false;
+	    readyDelay = 100;
 	    setTimeout(function() { configure(window.__wf_ix); }, 1);
 	  };
 
@@ -1198,10 +1239,13 @@
 
 	    // Handle loads or readys if they exist
 	    if (loads.length) Webflow.load(runLoads);
-	    if (readys.length) setTimeout(runReadys, 1);
+	    if (readys.length) setTimeout(runReadys, readyDelay);
 
 	    // Trigger queued events, must happen after init
 	    IXEvents.init();
+
+	    // Trigger a redraw to ensure all IX intros play
+	    Webflow.redraw.up();
 	  }
 
 	  function build(i, el) {
@@ -2938,7 +2982,8 @@
 	    }
 
 	    // If a fixed header exists, offset for the height
-	    var header = $('header, body > .header, body > .w-nav:not([data-no-scroll])');
+	    var rootTag = Webflow.env('editor') ? '.w-editor-body' : 'body';
+	    var header = $('header, ' + rootTag + ' > .header, ' + rootTag + ' > .w-nav:not([data-no-scroll])');
 	    var offset = header.css('position') === 'fixed' ? header.outerHeight() : 0;
 
 	    win.setTimeout(function() {
@@ -3031,7 +3076,7 @@
 	  var dot = '<div class="w-slider-dot" data-wf-ignore />';
 	  var ix = IXEvents.triggers;
 	  var fallback;
-	  var redraw;
+	  var inRedraw;
 
 	  // -----------------------------------
 	  // Module methods
@@ -3051,7 +3096,7 @@
 	  };
 
 	  api.redraw = function() {
-	    redraw = true;
+	    inRedraw = true;
 	    init();
 	  };
 
@@ -3065,10 +3110,9 @@
 	    $sliders = $doc.find(namespace);
 	    if (!$sliders.length) return;
 	    $sliders.filter(':visible').each(build);
-	    redraw = null;
+	    inRedraw = null;
 	    if (fallback) return;
 
-	    // Wire events
 	    removeListeners();
 	    addListeners();
 	  }
@@ -3106,7 +3150,7 @@
 	    data.nav = $el.children('.w-slider-nav');
 	    data.slides = data.mask.children('.w-slide');
 	    data.slides.each(ix.reset);
-	    if (redraw) data.maskWidth = 0;
+	    if (inRedraw) data.maskWidth = 0;
 
 	    // Disable in old browsers
 	    if (!tram.support.transform) {
@@ -3175,6 +3219,7 @@
 	    config.duration = duration != null ? +duration : 500;
 
 	    if (+data.el.attr('data-infinite')) config.infinite = true;
+	    if (+data.el.attr('data-disable-swipe')) config.disableSwipe = true;
 
 	    if (+data.el.attr('data-hide-arrows')) {
 	      config.hideArrows = true;
@@ -3250,6 +3295,7 @@
 	  function handler(data) {
 	    return function(evt, options) {
 	      options = options || {};
+	      var config = data.config;
 
 	      // Designer settings
 	      if (designer && evt.type === 'setting') {
@@ -3264,6 +3310,7 @@
 
 	      // Swipe event
 	      if (evt.type === 'swipe') {
+	        if (config.disableSwipe) return;
 	        if (Webflow.env('editor')) return;
 	        if (options.direction === 'left') return next(data)();
 	        if (options.direction === 'right') return previousFunction(data)();
@@ -3287,7 +3334,7 @@
 	    var index = options.index;
 	    var shift = {};
 	    if (index < 0) {
-	      index = anchors.length-1;
+	      index = anchors.length - 1;
 	      if (config.infinite) {
 	        // Shift first slide to the end
 	        shift.x = -data.endX;
@@ -3298,8 +3345,8 @@
 	      index = 0;
 	      if (config.infinite) {
 	        // Shift last slide to the start
-	        shift.x = anchors[anchors.length-1].width;
-	        shift.from = -anchors[anchors.length-1].x;
+	        shift.x = anchors[anchors.length - 1].width;
+	        shift.from = -anchors[anchors.length - 1].x;
 	        shift.to = shift.from - shift.x;
 	      }
 	    }
@@ -3311,7 +3358,7 @@
 
 	    // Hide arrows
 	    if (config.hideArrows) {
-	      data.index === anchors.length-1 ? data.right.hide() : data.right.show();
+	      data.index === anchors.length - 1 ? data.right.hide() : data.right.show();
 	      data.index === 0 ? data.left.hide() : data.left.show();
 	    }
 
@@ -3338,7 +3385,7 @@
 	    }
 
 	    // Set immediately after layout changes (but not during redraw)
-	    if (options.immediate && !redraw) {
+	    if (options.immediate && !inRedraw) {
 	      tram(targets).set(resetConfig);
 	      resetOthers();
 	      return;
@@ -3447,13 +3494,13 @@
 	        pages++;
 	        offset += maskWidth;
 	        // Store page anchor for transition
-	        data.anchors[pages-1] = { els: [], x: anchor, width: 0 };
+	        data.anchors[pages - 1] = { els: [], x: anchor, width: 0 };
 	      }
 	      // Set next anchor using current width + margin
 	      width = $(el).outerWidth(true);
 	      anchor += width;
-	      data.anchors[pages-1].width += width;
-	      data.anchors[pages-1].els.push(el);
+	      data.anchors[pages - 1].width += width;
+	      data.anchors[pages - 1].els.push(el);
 	    });
 	    data.endX = anchor;
 
@@ -3466,7 +3513,7 @@
 
 	    // Make sure index is still within range and call change handler
 	    var index = data.index;
-	    if (index >= pages) index = pages-1;
+	    if (index >= pages) index = pages - 1;
 	    change(data, { immediate: true, index: index });
 	  }
 
@@ -3475,9 +3522,9 @@
 	    var $dot;
 	    var spacing = data.el.attr('data-nav-spacing');
 	    if (spacing) spacing = parseFloat(spacing) + 'px';
-	    for (var i = 0; i<data.pages; i++) {
+	    for (var i = 0; i < data.pages; i++) {
 	      $dot = $(dot);
-	      if (data.nav.hasClass('w-num')) $dot.text(i+1);
+	      if (data.nav.hasClass('w-num')) $dot.text(i + 1);
 	      if (spacing != null) {
 	        $dot.css({
 	          'margin-left': spacing,
@@ -3543,11 +3590,24 @@
 	  var linkCurrent = 'w--current';
 	  var tabActive = 'w--tab-active';
 	  var ix = IXEvents.triggers;
+	  var inRedraw;
 
 	  // -----------------------------------
 	  // Module methods
 
 	  api.ready = api.design = api.preview = init;
+
+	  api.redraw = function() {
+	    inRedraw = true;
+	    init();
+	  };
+
+	  api.destroy = function() {
+	    $tabs = $doc.find(namespace);
+	    if (!$tabs.length) return;
+	    $tabs.each(resetIX);
+	    removeListeners();
+	  };
 
 	  // -----------------------------------
 	  // Private methods
@@ -3559,6 +3619,27 @@
 	    $tabs = $doc.find(namespace);
 	    if (!$tabs.length) return;
 	    $tabs.each(build);
+	    Webflow.env('preview') && $tabs.each(resetIX);
+	    inRedraw = null;
+
+	    removeListeners();
+	    addListeners();
+	  }
+
+	  function removeListeners() {
+	    Webflow.redraw.off(api.redraw);
+	  }
+
+	  function addListeners() {
+	    Webflow.redraw.on(api.redraw);
+	  }
+
+	  function resetIX(i, el) {
+	    var $el = $(el);
+	    var data = $.data(el, namespace);
+	    if (!data) return;
+	    data.links && data.links.each(ix.reset);
+	    data.panes && data.panes.each(ix.reset);
 	  }
 
 	  function build(i, el) {
@@ -3654,7 +3735,9 @@
 	    if (options.immediate || config.immediate) {
 	      $targets.addClass(tabActive).each(ix.intro);
 	      $previous.removeClass(tabActive);
-	      Webflow.redraw.up();
+	      // Redraw to benefit components in the hidden tab pane
+	      // But only if not currently in the middle of a redraw
+	      if (!inRedraw) Webflow.redraw.up();
 	      return;
 	    }
 
@@ -4222,5 +4305,12 @@ Webflow.require('ix').init([
   {"slug":"overlay-hidden","name":"Overlay hidden","value":{"style":{"display":"none","opacity":0,"scale":0.98},"triggers":[]}},
   {"slug":"close-overlay","name":"Close overlay","value":{"style":{},"triggers":[{"type":"click","selector":".overlay","stepsA":[{"opacity":0,"transition":"transform 500ms ease 0ms, opacity 500ms ease 0ms","scale":0.98},{"display":"none"}],"stepsB":[]}]}},
   {"slug":"show-overlay","name":"Show overlay","value":{"style":{},"triggers":[{"type":"click","selector":".overlay","stepsA":[{"display":"block"},{"opacity":1,"transition":"transform 500ms ease 0ms, opacity 500ms ease 0ms","scale":1}],"stepsB":[]}]}},
-  {"slug":"fade","name":"Fade","value":{"style":{"opacity":0},"triggers":[{"type":"load","preload":true,"stepsA":[{"opacity":1,"transition":"opacity 750ms ease 0ms"}],"stepsB":[]}]}}
+  {"slug":"fade","name":"Fade","value":{"style":{"opacity":0},"triggers":[{"type":"load","preload":true,"stepsA":[{"opacity":1,"transition":"opacity 750ms ease 0ms"}],"stepsB":[]}]}},
+  {"slug":"close-disclaimer","name":"Close disclaimer","value":{"style":{"display":"none"},"triggers":[{"type":"click","stepsA":[{"opacity":0,"transition":"opacity 500ms ease 0ms"},{"display":"none"}],"stepsB":[]}]}},
+  {"slug":"show-disclaimer","name":"Show disclaimer","value":{"style":{},"triggers":[{"type":"click","selector":".disclaimer","stepsA":[{"display":"block","opacity":0},{"opacity":1,"transition":"opacity 500ms ease 0ms"}],"stepsB":[]}]}},
+  {"slug":"hide-disc","name":"Hide disc","value":{"style":{},"triggers":[{"type":"click","selector":".disclaimer","stepsA":[{"opacity":0,"transition":"opacity 500ms ease 0ms"},{"display":"none"}],"stepsB":[]}]}},
+  {"slug":"show-disclaimer-onetime","name":"Show disclaimer (onetime)","value":{"style":{},"triggers":[{"type":"click","selector":".disclaimer-onetime","stepsA":[{"display":"block","opacity":0},{"opacity":1,"transition":"opacity 500ms ease 0ms"}],"stepsB":[]}]}},
+  {"slug":"hide-disc-2","name":"Hide disc 2","value":{"style":{},"triggers":[{"type":"click","selector":".disclaimer-onetime","stepsA":[{"opacity":0,"transition":"opacity 500ms ease 0ms"},{"display":"none"}],"stepsB":[]}]}},
+  {"slug":"hide-disc-3","name":"Hide disc 3","value":{"style":{},"triggers":[{"type":"click","selector":".disclaimer-onetime","stepsA":[{"opacity":0,"transition":"opacity 500ms ease 0ms"},{"display":"none"}],"stepsB":[]}]}},
+  {"slug":"close-disclaimer-2","name":"Close disclaimer 2","value":{"style":{"display":"none"},"triggers":[{"type":"click","stepsA":[{"opacity":0,"transition":"opacity 500ms ease 0ms"},{"display":"none"}],"stepsB":[]}]}}
 ]);
