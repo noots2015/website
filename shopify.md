@@ -9,5 +9,11 @@
 - https://cartjs.org/pages/guide
 - https://docs.shopify.com/themes/development/getting-started/using-ajax-api#add-to-cart
 - https://docs.shopify.com/themes/customization/products/find-variant-id
-- https://store.noots.co/products/focus-1-month-supply-2.xml
+
+---
+
+## Product XML
+
 - https://store.noots.co/products/focus-flow-1-month-supply-2.xml?recharge=1
+- https://store.noots.co/products/flow-1-month-supply-2.xml?recharge=1
+- https://store.noots.co/products/focus-1-month-supply-2.xml?recharge=1
